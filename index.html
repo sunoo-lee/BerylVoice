@@ -4,13 +4,18 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Beryl Voice</title>
+    <title>Beryl Player</title>
 
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Lora&family=Nanum+Myeongjo:wght@400;700&family=Playfair+Display:wght@500&display=swap");
 
+      ::selection {
+        background-color: rgb(51, 153, 221);
+        color: #fff;
+      }
       body {
-        font-family: "Nanum Myeongjo", serif;
+        font-family: "Lora", "Playfair Display", "Nanum Myeongjo", serif;
+        overflow: hidden;
       }
       html {
         display: flex;
@@ -24,175 +29,243 @@
         text-align: center;
       }
       .text {
-        margin: 30px auto;
-        text-align: center;
-        font-size: 16px;
+        font-size: 20px;
+      }
+      .sub_text {
+        font-size: 12px;
       }
       .title {
         font-size: 24px;
-        font-weight: bold;
+        font-weight: 700;
       }
-      .wrap {
-      }
-      .container {
-        padding: 20px;
-        width: 450px;
-        height: 650px;
-        background-color: rgb(255, 255, 255);
-        /* border: rgb(17, 115, 212) solid 1px; */
-        box-shadow: 2px 3px 10px rgb(0, 0, 0);
-
-        border-radius: 10px;
-      }
-      .btn_check {
-        /* font-size: 1.2rem; */
-        color: white;
-        width: 80px;
-        height: 30px;
-        margin-left: 5px;
-        font-size: 1.1rem;
-        background-color: rgb(65, 160, 255);
-        justify-content: center;
-        align-items: center;
-        border-radius: 15px;
-        border: none;
-      }
-      .btn_re {
-        display: none;
-        width: 100px;
-        height: 30px;
-        margin: auto;
+      #container {
+        position: relative;
+        overflow: hidden;
         margin-top: 20px;
-        font-size: 1.2rem;
-        color: white;
-        background-color: rgb(65, 160, 255);
-        justify-content: center;
-        align-items: center;
-        border-radius: 16px;
-        border: none;
-      }
-      button:hover {
-        background-color: rgb(91, 173, 255);
-      }
-      button:active {
-        background-color: rgb(0, 81, 161);
-      }
-      .img_line {
-        display: flex;
-        height: 30%;
-        /* width: 80%; */
-        margin: auto;
-        margin-bottom: 15px;
-        justify-content: center;
-      }
-      .img_box {
-        border: 1px solid rgb(0, 140, 255);
-        border: none;
-        background: #ddd;
-        margin: 5px;
-        width: 150px;
-        height: 95%;
-        border-radius: 5px;
-        box-shadow: 3px 3px 4px rgb(0, 0, 0);
+        width: 440px;
+        height: 740px;
+        background-color: rgb(255, 255, 255);
+
+        box-shadow: 2px 3px 10px rgb(0, 0, 0);
+        border-radius: 10px;
         transition: all 0.3s ease-in;
         -moz-transition: all 0.3s ease-in;
         -webkit-transition: all 0.3s ease-in;
       }
-      .line_1 {
-        margin-top: 50px;
+      #container.playing {
+        background: linear-gradient(
+          to bottom,
+          rgba(166, 208, 255, 0.493) -100px,
+          #fff
+        );
+        transition: all 0.3s ease-in;
+        -moz-transition: all 0.3s ease-in;
+        -webkit-transition: all 0.3s ease-in;
       }
-      h3,
-      h4 {
-        margin: 0;
-        text-align: center;
+
+      button:hover {
+        transform: scale(1.1);
+        /* zoom: 2; */
       }
-      h3 {
+
+      button,
+      .img_box,
+      .profile_pic {
+        transition: all 0.3s ease-in;
+        -moz-transition: all 0.3s ease-in;
+        -webkit-transition: all 0.3s ease-in;
+      }
+      .profile {
+        position: relative;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 20px 0;
         margin-top: 30px;
-        font-weight: bold;
+      }
+      .profile_pic {
+        width: 100px;
+        height: 100px;
+        background: #ddd;
+        background-image: url("img/profile.png");
+        filter: grayscale(100%);
+        border: none;
+        border-radius: 50%;
+        margin-bottom: 15px;
+        box-shadow: 3px 3px 4px rgb(0, 0, 0);
+      }
+      .profile_pic:hover {
+        filter: none;
+      }
+      .img_line {
+        z-index: 1;
+        display: flex;
+        margin: 0px 15px;
+        justify-content: center;
+      }
+      .img_box {
+        z-index: 2;
+        border: none;
+        background: #ddd;
+        margin: 5px;
+        width: 100px;
+        height: 120px;
+        border-radius: 5px;
+        box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.384);
+      }
+      .img_box:hover {
+        opacity: 0.7;
+        transform: scale(1.1);
       }
       .img_1 {
-        background-image: url("1.png");
+        background-image: url("./img/1.png");
       }
       .img_2 {
-        background-image: url("2.png");
+        background-image: url("./img/2.png");
       }
       .img_3 {
-        background-image: url("3.png");
+        background-image: url("./img/6.png");
       }
       .img_4 {
-        background-image: url("4.png");
+        background-image: url("./img/4.png");
+      }
+      .img_5 {
+        background-image: url("./img/9.png");
+      }
+      .img_6 {
+        background-image: url("./img/3.png");
+      }
+      .img_7 {
+        background-image: url("./img/7.png");
+      }
+      .img_8 {
+        background-image: url("./img/5.png");
+      }
+      .img_9 {
+        background-image: url("./img/8.png");
       }
       .img_1,
       .img_2,
       .img_3,
-      .img_4 {
-        background-size: 180px;
+      .img_4,
+      .img_5,
+      .img_6,
+      .img_7,
+      .img_8,
+      .img_9,
+      .profile_pic {
+        background-size: 110px;
         background-position: center;
       }
-      .js-onOffWrap {
-        margin-top: 30px;
+      .player_wrap {
+        width: 350px;
+        height: 60px;
+        margin: 30px auto;
+        padding-left: 10px;
+        padding-right: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        background: #222;
+        border-radius: 50px;
+        border: none;
+        color: #fff;
+        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.438);
+      }
+      .button_Wrap {
         display: flex;
         justify-content: center;
+        /* margin-right: 20px; */
       }
-      .js-playBtn {
-        background-image: url("play.png");
+      .play_Btn,
+      .stop_Btn {
+        background: transparent;
+        font-size: 30px;
+        line-height: 30px;
+        color: #fff;
         background-size: 40px;
         border: none;
         cursor: pointer;
         width: 40px;
         height: 40px;
       }
-      .js-stopBtn {
+      .stop_Btn {
         display: none;
-        /* opacity: 0; */
-        background-image: url("pause.png");
-        background-size: 40px;
-        border: none;
-        cursor: pointer;
-        width: 40px;
-        height: 40px;
       }
-      .img_box:hover {
-        opacity: 0.5;
+
+      .visualizer-container {
+        width: 440px;
+        display: flex;
+        align-items: flex-start;
+        position: absolute;
+        top: -10px;
+        z-index: 1;
+        text-align: center;
+        overflow: hidden;
+      }
+
+      .visualizer-container__bar {
+        display: inline-block;
+        background: rgba(10, 125, 255, 0.568);
+        margin: 0 2px;
+        width: 15px;
+        border-radius: 25px 25px 0 0;
       }
     </style>
   </head>
   <body>
     <div class="wrap">
-      <h2>VOICE PLAYER</h2>
-      <div class="container">
-        <div class="img_line line_1">
+      <div id="container" class="container">
+        <div class="profile">
+          <div class="profile_pic"></div>
+          <div class="profile_name title">Berylio Closill</div>
+          <div class="profile_info sub_text">Veteran</div>
+        </div>
+        <div class="img_line">
           <div class="img_box img_1"></div>
           <div class="img_box img_2"></div>
-        </div>
-        <div class="img_line line_2">
           <div class="img_box img_3"></div>
+        </div>
+        <div class="img_line">
           <div class="img_box img_4"></div>
+          <div class="img_box img_5"></div>
+          <div class="img_box img_6"></div>
         </div>
-        <div class="text">
-          <div class="title">Achilles Come Down</div>
-          <div>Gang of Youth</div>
+        <div class="img_line">
+          <div class="img_box img_7"></div>
+          <div class="img_box img_8"></div>
+          <div class="img_box img_9"></div>
         </div>
-        <!-- button -->
-        <div class="bgm-wrap">
-          <audio id="audioContainer">
-            <source
-              src="Achilles Come Down_Gang of Youths_320k.mp3"
-              type="audio/mp3"
-            />
-          </audio>
-          <div class="js-onOffWrap">
-            <button class="js-playBtn"></button>
-            <button class="js-stopBtn"></button>
+        <!-- <div class="img_line line_2"></div> -->
+        <audio id="audioContainer">
+          <source
+            src="./audio/Achilles Come Down_Gang of Youths_320k.mp3"
+            type="audio/mp3"
+          />
+        </audio>
+        <div class="player_wrap">
+          <div class="">
+            <div class="text">Achilles Come Down</div>
+            <div class="sub_text">Gang of Youth</div>
+          </div>
+          <!-- button -->
+          <div class="bgm-wrap">
+            <div class="button_Wrap">
+              <button class="play_Btn">▶</button>
+              <button class="stop_Btn">&#10073;&#10073;</button>
+            </div>
           </div>
         </div>
+        <div class="visualizer-container"></div>
       </div>
     </div>
 
     <script>
       const audioContainer = document.querySelector("#audioContainer");
-      const playBtn = document.querySelector(".js-playBtn");
-      const stopBtn = document.querySelector(".js-stopBtn");
+      const playBtn = document.querySelector(".play_Btn");
+      const stopBtn = document.querySelector(".stop_Btn");
+      const $container = document.getElementById("container");
 
       const MUSIC_COUNT = 3; // 음악 갯수
 
@@ -202,59 +275,101 @@
         audioContainer.volume = 0.2;
         audioContainer.loop = true;
         audioContainer.play();
+        playBtn.style.display = "none";
+        stopBtn.style.display = "block";
+        $container.classList.add("playing");
       }
 
       function stopAudio() {
         audioContainer.pause();
         playBtn.style.display = "block";
         stopBtn.style.display = "none";
+        $container.classList.remove("playing");
       }
 
       function loadAudio() {
         const source = document.querySelector("#audioSource");
-        // source.src = `${currentAudio}.mp3`;
         audioContainer.load();
         playAudio();
         playBtn.style.display = "none";
         stopBtn.style.display = "block";
       }
 
-      function handleNextButtonClick() {
-        if (currentAudio < MUSIC_COUNT) {
-          currentAudio += 1;
-        } else {
-          currentAudio = 1;
-        }
-
-        audioContainer.pause();
-        loadAudio();
-      }
-
-      playBtn.addEventListener("click", loadAudio);
-      //   playBtn.addEventListener("click", startAudioTimer);
+      playBtn.addEventListener("click", playAudio);
       stopBtn.addEventListener("click", stopAudio);
 
-      function startAudioTimer() {
-        //플레이어가 재생중일때 실시간재생 시간을 초단위로 출력
-        var progressBar = $(".play-progress-bar");
-        var progress_val = 0; // 재생 progress bar 값
-        var playtime = 0; // 재생 시간
-        audioTimer = setInterval(function () {
-          var player = document.getElementById("bgm-audio-player");
-          // audio 태그에서 현재 재생시간을 가져온다.
-          currentTime = Math.round(player.currentTime);
-          // 00:00의 형식으로 표기하기위해 포맷변경
-          playtime = setTimeFormat(currentTime);
+      // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
-          // 가져온 현재 재생시간을 progress bar에 표기하기위해 currentTime가공
-          // 재생 완료를 100으로 잡고 현재 재생시간을 계산
-          // 소수점 첫번째 자리까지 계산
-          progress_val = (currentTime / maxTime) * 100;
-          progress_val = progress_val.toFixed(1);
-          $(".play-time.start").text(playtime);
-          progressBar.css("width", progress_val + "%");
-        }, 1000);
-      }
+      (function () {
+        // The number of bars that should be displayed
+        const NBR_OF_BARS = 50;
+
+        // Get the audio element tag
+        const audio = document.querySelector("audio");
+
+        // Create an audio context
+        const ctx = new AudioContext();
+
+        // Create an audio source
+        const audioSource = ctx.createMediaElementSource(audio);
+
+        // Create an audio analyzer
+        const analayzer = ctx.createAnalyser();
+
+        // Connect the source, to the analyzer, and then back the the context's destination
+        audioSource.connect(analayzer);
+        audioSource.connect(ctx.destination);
+
+        // Print the analyze frequencies
+        const frequencyData = new Uint8Array(analayzer.frequencyBinCount);
+        analayzer.getByteFrequencyData(frequencyData);
+        console.log("frequencyData", frequencyData);
+
+        // Get the visualizer container
+        const visualizerContainer = document.querySelector(
+          ".visualizer-container"
+        );
+
+        // Create a set of pre-defined bars
+        for (let i = 0; i < NBR_OF_BARS; i++) {
+          const bar = document.createElement("DIV");
+          bar.setAttribute("id", "bar" + i);
+          bar.setAttribute("class", "visualizer-container__bar");
+          visualizerContainer.appendChild(bar);
+        }
+
+        // This function has the task to adjust the bar heights according to the frequency data
+        function renderFrame() {
+          // Update our frequency data array with the latest frequency data
+          analayzer.getByteFrequencyData(frequencyData);
+
+          for (let i = 0; i < NBR_OF_BARS; i++) {
+            // Since the frequency data array is 1024 in length, we don't want to fetch
+            // the first NBR_OF_BARS of values, but try and grab frequencies over the whole spectrum
+            const index = (i + 10) * 2;
+            // fd is a frequency value between 0 and 255
+            const fd = frequencyData[index];
+
+            // Fetch the bar DIV element
+            const bar = document.querySelector("#bar" + i);
+            if (!bar) {
+              continue;
+            }
+
+            // If fd is undefined, default to 0, then make sure fd is at least 4
+            // This will make make a quiet frequency at least 4px high for visual effects
+            const barHeight = Math.max(4, fd || 0);
+            bar.style.height = barHeight + "px";
+          }
+
+          // At the next animation frame, call ourselves
+          window.requestAnimationFrame(renderFrame);
+        }
+
+        renderFrame();
+
+        audio.volume = 0.1;
+      })();
     </script>
   </body>
 </html>
